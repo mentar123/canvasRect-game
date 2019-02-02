@@ -4,19 +4,21 @@ const color = ["red","green","blue","white"];
 var score = 0;
 var isStart = false;
 var  continueAnimate = true;
-function random(min, max) {
+ function random (min, max) {
   let rand = min + Math.random() * (max + 1 - min);
   rand = Math.floor(rand);
-  return rand;
-};
-var postion = random(0,600);
-var grav = random(2,5);
-var colorNumb = random(0,color.length);
-
-function isCursorRect(x,y){
-  return x > postion && x < postion + 40 &&
-         y > currentPos && y < currentPos + 50;
+  return rand;};
+ 
+function Rect(){
+  this.rectH = 20;
+  this.rectW = 20;
+  this.postion = random(0,600);
+  this.grav = random(2,5);
+  this.colorNumb = random(0,color.length);
 }
+
+var rect1 = new Rect();
+
 
 function animate() { 
   var scoreTable = document.getElementById('score');
@@ -26,6 +28,10 @@ function animate() {
     ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientWidth);
     return;
   } 
+  isCursorRect = function (x,y){
+    return x > rect1.postion && x < rect1.postion + 40 &&
+           y > currentPos && y < currentPos + 50;
+  };
   canvas.onclick = function(e){
     var x = e.pageX;
     var y = e.pageY;
@@ -36,14 +42,12 @@ function animate() {
     }
   }
   ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientWidth);  
-  ctx.fillStyle = color[colorNumb];
-  ctx.fillRect(postion, currentPos, 20, 20);
-  currentPos += grav;
+  ctx.fillStyle = color[rect1.colorNumb];
+  ctx.fillRect(rect1.postion, currentPos, rect1.rectH, rect1.rectW);
+  currentPos += rect1.grav;
   if(currentPos >= canvas.clientHeight) {
     currentPos = 0;
-    grav = random(2,5);
-    colorNumb = random(0,color.length);
-    postion = random(0,canvas.clientWidth-50);
+    rect1 = new Rect();
   }
   requestAnimationFrame(animate);
 }
